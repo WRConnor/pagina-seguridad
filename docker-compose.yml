@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cripto_auth_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SESSION_SECRET=secreto_produccion_el_bosque_2026_seguridad_info
+      - COOKIE_SECURE=false
+    volumes:
+      # Persistencia de la base de datos relacional SQLite
+      - sqlite_data:/app/database
+
+volumes:
+  sqlite_data:
+    name: cripto_sqlite_data

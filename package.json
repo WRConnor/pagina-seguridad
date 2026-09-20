@@ -1,0 +1,35 @@
+{
+  "name": "pagina-seguridad-criptografia",
+  "version": "1.0.0",
+  "description": "Sistema de autenticación segura con BCrypt, protección contra fuerza bruta y analizador de criptografía clásica",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "init-db": "node database/init-db.js",
+    "test-bruteforce": "node test/test-bruteforce.js"
+  },
+  "keywords": [
+    "seguridad",
+    "autenticacion",
+    "bcrypt",
+    "fuerza-bruta",
+    "criptografia",
+    "cesar",
+    "afin",
+    "vigenere",
+    "kasiski"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-session": "^2.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

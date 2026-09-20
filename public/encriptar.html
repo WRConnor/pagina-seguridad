@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encriptar texto</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <nav class="top-nav">
+        <a href="/index.html">Analizador</a>
+        <a href="/encriptar.html">Encriptar texto</a>
+      </nav>
+
+      <header class="header">
+        <p class="eyebrow">Cifrado clásico</p>
+        <h1>Encriptar texto</h1>
+        <p class="subtitle">César, Afin y Vigenère sobre el alfabeto español de 27 caracteres</p>
+      </header>
+
+      <section class="panel">
+        <h2>Texto plano</h2>
+        <textarea id="textoPlano" spellcheck="false" placeholder="Escribe el texto en mayúsculas, sin espacios si quieres mantener el formato clásico..."></textarea>
+
+        <div class="encrypt-grid">
+          <div class="field-group">
+            <label for="metodoCifrado">Método</label>
+            <select id="metodoCifrado">
+              <option value="cesar">César</option>
+              <option value="afin">Afin</option>
+              <option value="vigenere">Vigenère</option>
+            </select>
+          </div>
+
+          <div class="field-group" id="grupoDesplazamiento">
+            <label for="desplazamiento">Desplazamiento</label>
+            <input id="desplazamiento" type="number" min="0" max="26" value="5" />
+          </div>
+
+          <div class="field-group hidden-field" id="grupoAfinA">
+            <label for="claveA">Clave a</label>
+            <input id="claveA" type="number" min="1" max="26" value="5" />
+          </div>
+
+          <div class="field-group hidden-field" id="grupoAfinB">
+            <label for="claveB">Clave b</label>
+            <input id="claveB" type="number" min="0" max="26" value="8" />
+          </div>
+
+          <div class="field-group hidden-field" id="grupoClaveVigenere">
+            <label for="claveVigenere">Clave</label>
+            <input id="claveVigenere" type="text" value="CLAVE" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="encriptarBtn" type="button">Encriptar</button>
+          <button id="limpiarEncriptadoBtn" type="button" class="secondary">Limpiar</button>
+        </div>
+      </section>
+
+      <section class="panel result-panel">
+        <h2>Texto cifrado</h2>
+        <div id="resultadoCifrado" class="output-box">Aquí aparecerá el resultado del cifrado.</div>
+      </section>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/encriptar.js"></script>
+  </body>
+</html>

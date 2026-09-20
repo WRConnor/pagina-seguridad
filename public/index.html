@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analizador de Criptogramas</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <nav class="top-nav">
+        <a href="/index.html">Analizador</a>
+        <a href="/encriptar.html">Encriptar texto</a>
+      </nav>
+
+      <header class="header">
+        <p class="eyebrow">Criptoanálisis clásico</p>
+        <h1>Analizador de Criptogramas</h1>
+        <p class="subtitle">Criptoanálisis clásico sobre alfabeto español de 27 caracteres</p>
+      </header>
+
+      <section class="panel">
+        <h2>Entrada</h2>
+        <label for="inputCriptograma" class="sr-only">Criptograma</label>
+        <textarea id="inputCriptograma" spellcheck="false" placeholder="Pega aquí el criptograma en mayúsculas y sin espacios..."></textarea>
+        <div class="actions">
+          <button id="analizarBtn" type="button">Analizar criptograma</button>
+          <button id="limpiarBtn" type="button" class="secondary">Limpiar</button>
+        </div>
+        <div id="alertaEntrada" class="alert hidden"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Análisis estadístico</h2>
+        <div id="estadisticas" class="stats-grid"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Método seleccionado</h2>
+        <div id="metodoSeleccionado" class="method-box"></div>
+      </section>
+
+      <section class="panel result-panel">
+        <h2>Resultado</h2>
+        <div id="resultadoMetodo"></div>
+        <button id="copiarResultado" type="button" class="secondary hidden">Copiar resultado</button>
+      </section>
+
+      <section class="panel">
+        <h2>Análisis técnico</h2>
+        <details id="detallesTecnicos" open>
+          <summary>Ver detalles</summary>
+          <div id="detallesContenido"></div>
+        </details>
+      </section>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/analizador.js"></script>
+  </body>
+</html>
