@@ -19,7 +19,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 DOMAIN="wramoso.site"
-VPS_IP="34.95.198.230"
+VPS_IP="136.65.24.69"
 NGINX_CONF="/etc/nginx/conf.d/wramoso.site.conf"
 
 echo -e "${BLUE}==================================================================${NC}"
@@ -53,7 +53,7 @@ cat << 'EOF' > ${NGINX_CONF}
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     location / {
         proxy_pass http://127.0.0.1:3000;

@@ -18,7 +18,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 DOMAIN="wramoso.site"
-VPS_IP="34.95.198.230"
+VPS_IP="136.65.24.69"
 KEY_PATH="/etc/pki/tls/private/${DOMAIN}.key"
 CRT_PATH="/etc/pki/tls/certs/${DOMAIN}.crt"
 NGINX_CONF="/etc/nginx/conf.d/wramoso.site.conf"
@@ -58,7 +58,7 @@ echo -e "${BLUE}[*] Generando certificado X.509 autofirmado en ${CRT_PATH}...${N
 openssl req -new -x509 -days 365 \
   -key "${KEY_PATH}" \
   -out "${CRT_PATH}" \
-  -subj "/C=CO/ST=Bogota/L=Bogota/O=Universidad El Bosque/OU=Seguridad de la Informacion/CN=${DOMAIN}" \
+  -subj "/C=CO/ST=Bogota/L=Bogota/O=Universidad El Bosque/OU=N/A/CN=${DOMAIN}" \
   -addext "subjectAltName=DNS:${DOMAIN},DNS:www.${DOMAIN},IP:${VPS_IP}"
 chmod 644 "${CRT_PATH}"
 
@@ -71,7 +71,7 @@ cat << 'EOF' > ${NGINX_CONF}
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -88,7 +88,7 @@ server {
 server {
     listen 443 ssl default_server;
     listen [::]:443 ssl default_server;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     # Rutas oficiales en Rocky Linux
     ssl_certificate     /etc/pki/tls/certs/wramoso.site.crt;

@@ -58,7 +58,7 @@ def create_report():
     meta_p.add_run("Dominio Asignado: ").bold = True
     meta_p.add_run("wramoso.site (y www.wramoso.site)\n")
     meta_p.add_run("IP Pública VPS: ").bold = True
-    meta_p.add_run("34.95.198.230\n")
+    meta_p.add_run("136.65.24.69\n")
     meta_p.add_run("Entorno de Ejecución: ").bold = True
     meta_p.add_run("Rocky Linux (VPS) + Nginx + OpenSSL + Certbot + Docker (App Node.js)\n")
 
@@ -108,7 +108,7 @@ def create_report():
 
     p_box1 = doc.add_paragraph()
     p_box1.add_run("[EVIDENCIA 1 - CAPTURA DE PANTALLA REQUERIDA]\n").bold = True
-    p_box1.add_run("Pegar aquí la captura del navegador accediendo a http://wramoso.site/login (o http://34.95.198.230/login) mostrando la advertencia 'No es seguro' en la barra de direcciones.")
+    p_box1.add_run("Pegar aquí la captura del navegador accediendo a http://wramoso.site/login (o http://136.65.24.69/login) mostrando la advertencia 'No es seguro' en la barra de direcciones.")
 
     doc.add_paragraph(
         "Análisis de Riesgos de Seguridad:\n"
@@ -121,7 +121,7 @@ def create_report():
     doc.add_heading("4. Fase 2: Certificado SSL Autofirmado", level=1)
     doc.add_paragraph(
         "Siguiendo el procedimiento documentado en la guía de AlcanceLibre (CentOS/Rocky Linux), se procedió a la creación "
-        "y activación manual del certificado autofirmado utilizando OpenSSL con Subject Alternative Name (SAN) para wramoso.site, www.wramoso.site e IP 34.95.198.230."
+        "y activación manual del certificado autofirmado utilizando OpenSSL con Subject Alternative Name (SAN) para wramoso.site, www.wramoso.site e IP 136.65.24.69."
     )
 
     doc.add_heading("Comandos Manuales Ejecutados en Rocky Linux:", level=2)
@@ -131,15 +131,15 @@ def create_report():
     p_cmd_ssl.add_run("# 2. Generar el certificado X.509 autofirmado (validez 365 días):\n").bold = True
     p_cmd_ssl.add_run("openssl req -new -x509 -days 365 -key /etc/pki/tls/private/wramoso.site.key "
                       "-out /etc/pki/tls/certs/wramoso.site.crt "
-                      "-subj \"/C=CO/ST=Bogota/L=Bogota/O=Universidad El Bosque/OU=Seguridad de la Informacion/CN=wramoso.site\" "
-                      "-addext \"subjectAltName=DNS:wramoso.site,DNS:www.wramoso.site,IP:34.95.198.230\"\n")
+                      "-subj \"/C=CO/ST=Bogota/L=Bogota/O=Universidad El Bosque/OU=N/A/CN=wramoso.site\" "
+                      "-addext \"subjectAltName=DNS:wramoso.site,DNS:www.wramoso.site,IP:136.65.24.69\"\n")
 
     doc.add_heading("Modificación Manual de Nginx (/etc/nginx/conf.d/default.conf):", level=2)
     doc.add_paragraph(
         "Se agregó el bloque de escucha en el puerto 443 vinculando las directivas ssl_certificate y ssl_certificate_key:\n\n"
         "server {\n"
         "    listen 443 ssl;\n"
-        "    server_name wramoso.site www.wramoso.site 34.95.198.230;\n"
+        "    server_name wramoso.site www.wramoso.site 136.65.24.69;\n"
         "    ssl_certificate /etc/pki/tls/certs/wramoso.site.crt;\n"
         "    ssl_certificate_key /etc/pki/tls/private/wramoso.site.key;\n"
         "    ssl_protocols TLSv1.2 TLSv1.3;\n"
