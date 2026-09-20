@@ -19,8 +19,13 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'"],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:"],
+        upgradeInsecureRequests: null, // Evita forzar HTTPS en subrecursos cuando se prueba en HTTP (Fase 1)
       },
     },
+    crossOriginOpenerPolicy: false, // Evita advertencias de origen no confiable en HTTP o IP directa
+    crossOriginResourcePolicy: false,
+    originAgentCluster: false,
+    hsts: false, // Nginx se encarga del HSTS y de la terminación TLS
   })
 );
 
@@ -69,7 +74,7 @@ app.use((req, res) => {
   if (req.accepts('json') || req.xhr) {
     return res.status(404).json({ error: 'Recurso no encontrado' });
   }
-  // Si la petición es un archivo de recursos (.css, .js, .ico, etc.), devolver 404 real y no redirigir a HTML
+  // Si la petición es un archivo de recursos (.css, .js, .ico, etc.), devolver 404 y no redirigir a HTML
   if (/\.(css|js|ico|png|jpg|jpeg|svg|woff2?|ttf|map)$/i.test(req.path)) {
     return res.status(404).type('text/plain').send('Recurso no encontrado');
   }
