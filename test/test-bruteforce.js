@@ -236,6 +236,33 @@ async function ejecutarPruebas() {
     }
     console.log(' -> [PASÓ] Nuevo usuario autenticado exitosamente con su contraseña hasheada.\n');
 
+    // 8. Probar que intentar saltar el login por URL devuelva HTTP 401 Unauthorized
+    console.log('====================================================================');
+    console.log(' [TEST 8] PRUEBA DE PROTECCIÓN CONTRA SALTO DE LOGIN POR URL');
+    console.log('====================================================================');
+    console.log('>>> Intentando acceder a la URL principal (/) sin sesión activa...');
+    const resBypassRoot = await request(server, { path: '/', method: 'GET' });
+    console.log(` -> Status devuelto en /: ${resBypassRoot.status}`);
+    if (resBypassRoot.status !== 401) {
+      throw new Error(`Fallo de seguridad: Se esperaba 401 Unauthorized al acceder a / sin sesión, pero devolvió ${resBypassRoot.status}`);
+    }
+
+    console.log('>>> Intentando acceder a /index.html sin sesión activa...');
+    const resBypassIndex = await request(server, { path: '/index.html', method: 'GET' });
+    console.log(` -> Status devuelto en /index.html: ${resBypassIndex.status}`);
+    if (resBypassIndex.status !== 401) {
+      throw new Error(`Fallo de seguridad: Se esperaba 401 Unauthorized al acceder a /index.html sin sesión, pero devolvió ${resBypassIndex.status}`);
+    }
+
+    console.log('>>> Intentando acceder a /encriptar.html sin sesión activa...');
+    const resBypassEncriptar = await request(server, { path: '/encriptar.html', method: 'GET' });
+    console.log(` -> Status devuelto en /encriptar.html: ${resBypassEncriptar.status}`);
+    if (resBypassEncriptar.status !== 401) {
+      throw new Error(`Fallo de seguridad: Se esperaba 401 Unauthorized al acceder a /encriptar.html sin sesión, pero devolvió ${resBypassEncriptar.status}`);
+    }
+
+    console.log(' -> [PASÓ] Todas las URLs protegidas rechazan el acceso sin sesión con HTTP 401 Unauthorized.\n');
+
     console.log('====================================================================');
     console.log('  ¡TODAS LAS PRUEBAS (SEGURIDAD, FUERZA BRUTA Y REGISTRO) HAN PASADO!');
     console.log('====================================================================');

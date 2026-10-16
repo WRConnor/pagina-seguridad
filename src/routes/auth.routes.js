@@ -12,10 +12,12 @@ const { middlewareProteccionFuerzaBruta } = require('../middlewares/bruteForce.m
 
 // Rutas del Formulario de Login (Sección 1.2 del Laboratorio)
 router.get('/login', mostrarFormularioLogin);
+router.get('/login.html', (req, res) => res.redirect('/login'));
 router.post('/login', middlewareProteccionFuerzaBruta, procesarLogin);
 
 // Rutas de Registro de Usuario
 router.get('/registro', mostrarFormularioRegistro);
+router.get('/registro.html', (req, res) => res.redirect('/registro'));
 router.post('/registro', procesarRegistro);
 
 // Logout
