@@ -8,7 +8,7 @@
 **Docente:** Seguridad de la Información  
 **Fecha:** Septiembre de 2026  
 **Dominio Asignado:** `wramoso.site` (y `www.wramoso.site`)  
-**IP Pública VPS:** `34.95.198.230`  
+**IP Pública VPS:** `136.65.24.69`  
 **Nombre del Archivo:** `ramos-wilmer-ssl.docx`
 
 ---
@@ -31,7 +31,7 @@ Implementar y configurar de manera manual certificados de seguridad SSL/TLS sobr
 
 Para el desarrollo del laboratorio se implementó una arquitectura basada en un servidor **Rocky Linux** nativo en el VPS:
 
-- **Sistema Operativo Anfitrión (Host):** Rocky Linux en el VPS de Google Cloud (`34.95.198.230`).
+- **Sistema Operativo Anfitrión (Host):** Rocky Linux en el VPS de Google Cloud (`136.65.24.69`).
 - **Servidor Web / Reverse Proxy:** Nginx instalado nativamente en Rocky Linux.
   - Puerto 80 (HTTP) y Puerto 443 (HTTPS).
   - Rutas oficiales de Rocky Linux:
@@ -54,7 +54,7 @@ En esta fase inicial, Nginx escucha exclusivamente en el puerto 80 sin directiva
 ```nginx
 server {
     listen 80 default_server;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     location / {
         proxy_pass http://app:3000;
@@ -67,7 +67,7 @@ server {
 ```
 
 ### 3.2. Evidencia de Navegación y Riesgos de Seguridad
-Al ingresar a `http://wramoso.site/login` (o `http://34.95.198.230/login`):
+Al ingresar a `http://wramoso.site/login` (o `http://136.65.24.69/login`):
 
 > **[INSERTAR CAPTURA 1: Navegador mostrando el sitio en http://wramoso.site con la advertencia "No es seguro" en la barra de direcciones]**
 
@@ -95,8 +95,8 @@ chmod 600 /etc/pki/tls/private/wramoso.site.key
 openssl req -new -x509 -days 365 \
   -key /etc/pki/tls/private/wramoso.site.key \
   -out /etc/pki/tls/certs/wramoso.site.crt \
-  -subj "/C=CO/ST=Bogota/L=Bogota/O=Universidad El Bosque/OU=Seguridad de la Informacion/CN=wramoso.site" \
-  -addext "subjectAltName=DNS:wramoso.site,DNS:www.wramoso.site,IP:34.95.198.230"
+  -subj "/C=CO/ST=Bogota/L=Bogota/O=Universidad El Bosque/OU=N/A/CN=wramoso.site" \
+  -addext "subjectAltName=DNS:wramoso.site,DNS:www.wramoso.site,IP:136.65.24.69"
 chmod 644 /etc/pki/tls/certs/wramoso.site.crt
 ```
 
@@ -106,7 +106,7 @@ Se editó manualmente el archivo `/etc/nginx/conf.d/default.conf` para habilitar
 ```nginx
 server {
     listen 80;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     location / {
         proxy_pass http://app:3000;
@@ -116,7 +116,7 @@ server {
 
 server {
     listen 443 ssl;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     # Rutas oficiales del certificado y la llave privada en Rocky Linux
     ssl_certificate     /etc/pki/tls/certs/wramoso.site.crt;
@@ -140,7 +140,7 @@ nginx -s reload
 ```
 
 ### 4.3. Evidencia y Problemática Asociada
-Al acceder a `https://wramoso.site` (o `https://34.95.198.230`):
+Al acceder a `https://wramoso.site` (o `https://136.65.24.69`):
 
 > **[INSERTAR CAPTURA 2: Advertencia de seguridad del navegador ("Advertencia: Riesgo potencial de seguridad a continuación" / SEC_ERROR_UNKNOWN_ISSUER)]**
 

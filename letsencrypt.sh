@@ -101,7 +101,7 @@ cat << 'EOF' > ${NGINX_CONF}
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     location /.well-known/acme-challenge/ {
         root /usr/share/nginx/html;
@@ -116,7 +116,7 @@ server {
 server {
     listen 443 ssl http2 default_server;
     listen [::]:443 ssl http2 default_server;
-    server_name wramoso.site www.wramoso.site 34.95.198.230;
+    server_name wramoso.site www.wramoso.site 136.65.24.69;
 
     # Rutas oficiales de Let's Encrypt
     ssl_certificate     /etc/letsencrypt/live/wramoso.site/fullchain.pem;
