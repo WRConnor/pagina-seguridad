@@ -158,8 +158,8 @@ Para desplegar la aplicación en una Máquina Virtual de **Google Cloud Compute 
    - **Tipo de máquina:** `e2-micro` o `e2-small` (suficiente y económica).
    - **Disco de arranque:** Debian GNU/Linux 12 o Ubuntu 22.04 LTS.
    - **Firewall:** Marcar las casillas:
-     -  **Permitir tráfico HTTP**
-     -  **Permitir tráfico HTTPS**
+   -  **Permitir tráfico HTTP**
+   -  **Permitir tráfico HTTPS**
 4. Haz clic en **Crear**.
 
 ### Paso 2: Conectarse por SSH a la VM
@@ -209,6 +209,7 @@ Inicia el contenedor:
 ```bash
 docker-compose up -d --build
 ```
+
 ---
 
 
