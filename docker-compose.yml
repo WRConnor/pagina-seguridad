@@ -12,6 +12,8 @@ services:
       - PORT=3000
       - SESSION_SECRET=secreto_produccion_el_bosque_2026_seguridad_info
       - COOKIE_SECURE=false
+      - HOST_IP=${HOST_IP:-}
+      - VPS_IP=${VPS_IP:-}
     volumes:
       # Persistencia de la base de datos relacional SQLite
       - sqlite_data:/app/database

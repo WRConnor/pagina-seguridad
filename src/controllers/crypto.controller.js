@@ -2,6 +2,7 @@ const { analizarCriptogramaCompleto } = require('../services/analysis.service');
 const { cifrarCesar } = require('../services/cesar.service');
 const { cifrarAfin, esCoprimo } = require('../services/afin.service');
 const { cifrarVigenere } = require('../services/vigenere.service');
+const { obtenerIPMaquina } = require('../utils/ip.util');
 
 function analizar(req, res) {
   const { criptograma } = req.body || {};
@@ -90,6 +91,7 @@ function healthCheck(req, res) {
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.floor(process.uptime()),
     service: 'PaginaSeguridad Crypto & Auth API',
+    ip: obtenerIPMaquina(),
   });
 }
 

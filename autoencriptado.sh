@@ -17,15 +17,55 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# DETECCIÓN AUTOMÁTICA DE LA IP DE LA MÁQUINA / VPS
+# ------------------------------------------------------------------------------
+detectar_ip() {
+    if [[ -n "${VPS_IP}" ]]; then
+        echo "${VPS_IP}"
+        return
+    fi
+    if [[ -n "${HOST_IP}" ]]; then
+        echo "${HOST_IP}"
+        return
+    fi
+
+    local ip=""
+    # 1. Metadatos de Google Cloud Platform (Compute Engine)
+    ip=$(curl -s -m 2 -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" 2>/dev/null || true)
+
+    # 2. Servicios de IP pública externa
+    if [[ -z "$ip" || ! "$ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        ip=$(curl -s -m 3 -4 https://ifconfig.me 2>/dev/null || curl -s -m 3 -4 https://api.ipify.org 2>/dev/null || curl -s -m 3 -4 https://icanhazip.com 2>/dev/null || true)
+    fi
+
+    # 3. Interfaz de red local primaria del host
+    if [[ -z "$ip" || ! "$ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        ip=$(hostname -I 2>/dev/null | awk '{print $1}')
+    fi
+
+    if [[ -z "$ip" || ! "$ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        ip=$(ip route get 1.1.1.1 2>/dev/null | awk '{print $7}')
+    fi
+
+    # 4. Fallback si no hay red disponible
+    if [[ -z "$ip" || ! "$ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        ip="127.0.0.1"
+    fi
+
+    echo "$ip"
+}
+
 DOMAIN="wramoso.site"
-VPS_IP="136.65.24.69"
+VPS_IP=$(detectar_ip)
 KEY_PATH="/etc/pki/tls/private/${DOMAIN}.key"
 CRT_PATH="/etc/pki/tls/certs/${DOMAIN}.crt"
-NGINX_CONF="/etc/nginx/conf.d/wramoso.site.conf"
+NGINX_CONF="/etc/nginx/conf.d/${DOMAIN}.conf"
 
 echo -e "${BLUE}==================================================================${NC}"
 echo -e "${BLUE}   FASE 2: GENERACIÓN Y ACTIVACIÓN DE CERTIFICADO AUTOFIRMADO     ${NC}"
-echo -e "${BLUE}   Host: Rocky Linux | Dominio: ${DOMAIN} | IP: ${VPS_IP}         ${NC}"
+echo -e "${BLUE}   Host: Rocky Linux | Dominio: ${DOMAIN}                         ${NC}"
+echo -e "${BLUE}   IP detectada automáticamente: ${YELLOW}${VPS_IP}${BLUE}                    ${NC}"
 echo -e "${BLUE}==================================================================${NC}"
 
 # 1. Instalar paquetes necesarios si faltan
@@ -64,35 +104,35 @@ chmod 644 "${CRT_PATH}"
 
 # 6. Escribir configuración de Nginx con SSL autofirmado
 echo -e "${BLUE}[*] Configurando Nginx en ${NGINX_CONF}...${NC}"
-cat << 'EOF' > ${NGINX_CONF}
+cat << EOF > ${NGINX_CONF}
 # ==============================================================================
 # FASE 2: NGINX CON CERTIFICADO AUTOFIRMADO
 # ==============================================================================
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name wramoso.site www.wramoso.site 136.65.24.69;
+    server_name ${DOMAIN} www.${DOMAIN} ${VPS_IP};
 
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
     }
 }
 
 server {
     listen 443 ssl default_server;
     listen [::]:443 ssl default_server;
-    server_name wramoso.site www.wramoso.site 136.65.24.69;
+    server_name ${DOMAIN} www.${DOMAIN} ${VPS_IP};
 
     # Rutas oficiales en Rocky Linux
-    ssl_certificate     /etc/pki/tls/certs/wramoso.site.crt;
-    ssl_certificate_key /etc/pki/tls/private/wramoso.site.key;
+    ssl_certificate     /etc/pki/tls/certs/${DOMAIN}.crt;
+    ssl_certificate_key /etc/pki/tls/private/${DOMAIN}.key;
 
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
@@ -101,12 +141,12 @@ server {
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto https;
     }
 }

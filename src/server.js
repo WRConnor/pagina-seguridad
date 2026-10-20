@@ -1,6 +1,7 @@
 const http = require('node:http');
 const app = require('./app');
 const inicializarBaseDeDatos = require('../database/init-db');
+const { obtenerIPMaquina } = require('./utils/ip.util');
 
 const PORT = process.env.PORT || 3000;
 
@@ -10,10 +11,13 @@ async function iniciarServidor() {
     await inicializarBaseDeDatos();
 
     const server = http.createServer(app);
+    const ipDetectada = obtenerIPMaquina();
 
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`=======================================================`);
-      console.log(` Servidor seguro iniciado en http://localhost:${PORT}`);
+      console.log(` Servidor seguro iniciado exitosamente:`);
+      console.log(` - Local:            http://localhost:${PORT}`);
+      console.log(` - Red / IP Máquina: http://${ipDetectada}:${PORT}`);
       console.log(` Ambiente: ${process.env.NODE_ENV || 'development'}`);
       console.log(` Hashing BCrypt y Protección contra Fuerza Bruta: ACTIVOS`);
       console.log(`=======================================================`);
