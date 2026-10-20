@@ -169,7 +169,7 @@ server {
     ssl_prefer_server_ciphers off;
 
     # Cabeceras de seguridad
-    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=300; includeSubDomains" always;
     add_header X-Frame-Options DENY always;
     add_header X-Content-Type-Options nosniff always;
 
