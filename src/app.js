@@ -10,6 +10,9 @@ const { requiereAutenticacion } = require('./middlewares/auth.middleware');
 
 const app = express();
 
+// Habilitar detección automática de la IP real del cliente a través de proxies inversos (Nginx / Docker)
+app.set('trust proxy', 1);
+
 // 1. Cabeceras HTTP de seguridad con Helmet
 app.use(
   helmet({
