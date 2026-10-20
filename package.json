@@ -7,6 +7,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "init-db": "node database/init-db.js",
+    "reset-users": "node database/reset-users.js",
     "test-bruteforce": "node test/test-bruteforce.js"
   },
   "keywords": [
